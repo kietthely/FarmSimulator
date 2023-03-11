@@ -36,8 +36,8 @@ public abstract class Item {
 		age = inputAge;
 	}
 	
-	public boolean died(int currentAge) {
-		if(currentAge > deathAge) {		
+	public boolean died() {
+		if(age > deathAge) {		
 			return true;
 		}
 		else {
@@ -69,9 +69,16 @@ public abstract class Item {
 		}
 
 	}
+
+	public abstract Item clone();
+	
 	/**
-	 * Return the name of the Item
+	 * Return the symbol of the Item
 	 */
 	public abstract String toString();
-	
+	/**
+	 * 
+	 * @return the name of the Item
+	 */
+	public abstract String name();
 }

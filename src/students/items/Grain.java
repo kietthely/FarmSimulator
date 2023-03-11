@@ -8,7 +8,7 @@ package students.items;
 public class Grain extends Food{
 	
 	private static int count =0;
-	final int cost = 1;
+	final int COST = 1;
 	public Grain () {
 		super(2,6,2);
 		count+=1;
@@ -22,6 +22,14 @@ public class Grain extends Food{
 	public int getGenerationCount() {
 		return count;
 	}
+	@Override
+	public int getCost() {
+		if(age > maturationAge) {
+			return COST;
+		} else {
+			return 0;
+		}
+	}
 	
 	@Override
 	public String toString() {
@@ -32,4 +40,19 @@ public class Grain extends Food{
 		}
 
 	}
+
+	@Override
+	public Item clone() {
+		Grain newGrain = new Grain();
+		count -=1;
+		newGrain.age = age;
+		return newGrain;
+	}
+
+	@Override
+	public String name() {
+		return "Grain";
+	}
+	
+	
 }

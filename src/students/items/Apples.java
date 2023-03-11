@@ -5,7 +5,7 @@ package students.items;
  */
 public class Apples extends Food {
 	private static int count;
-	final int cost =2;
+	final int COST =2;
 	public Apples () {
 		super(3,5,3);
 		count +=1;
@@ -27,4 +27,32 @@ public class Apples extends Food {
 		}
 
 	}
+	/**
+	 * Deep copy of the class
+	 * The creation of this class is not accounted in the total number of this objects. 
+	 */
+	@Override
+	public Item clone() {
+		Apples newApple = new Apples();
+		count -= 1;
+		newApple.age = age;
+		return newApple;
+	}
+
+	@Override
+	public String name() {
+		return "Apples";
+	}
+
+	@Override
+	public int getCost() {
+		if(age > maturationAge) {
+			return COST;
+		} else {
+			return 0;
+		}
+	}
+	
+	
+	
 }
