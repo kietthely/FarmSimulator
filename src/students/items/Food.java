@@ -1,6 +1,11 @@
 package students.items;
 
-public class Food {
-
-
+public abstract class Food extends Item {
+	
+	@Override
+	public String toString() {
+		return "Food";
+	}
+	
+	
 }

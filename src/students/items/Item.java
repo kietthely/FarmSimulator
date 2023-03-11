@@ -22,7 +22,12 @@ public abstract class Item {
 		this.age = 0;
 		
 	}
-	
+	/**
+	 * Empty constructor
+	 */
+	protected Item() {
+		
+	}
 	public void tick() {
 		age +=1;
 	}
@@ -54,7 +59,7 @@ public abstract class Item {
 	/**
 	 * See if two objects have exactly the same information
 	 * @param otherItem
-	 * @return
+	 * @return true if have the same information, false otherwise.
 	 */
 	public boolean equals(Item otherItem) {
 		if(age == otherItem.age && deathAge == otherItem.deathAge && maturationAge == otherItem.maturationAge && monetaryValue == otherItem.monetaryValue) {
