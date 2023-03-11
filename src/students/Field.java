@@ -106,6 +106,10 @@ public class Field {
 		return totalMonetaryValue;
 	}
 	
+	/**
+	 * Print out the quantities and the overall of all items in the world 
+	 * @return
+	 */
 	public String getSummary() {
 		String summary ="";
 		//TODO: Finish getSummary()

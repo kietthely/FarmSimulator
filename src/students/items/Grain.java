@@ -19,7 +19,7 @@ public class Grain extends Food{
 	 * Get the number of grain objects that have been created in this world.
 	 * @return count
 	 */
-	public int getGenerationCount() {
+	public static int getGenerationCount() {
 		return count;
 	}
 	@Override

@@ -15,7 +15,7 @@ public class Apples extends Food {
 	 * Get the number of apple objects that have been created in this world.
 	 * @return count
 	 */
-	public int getGenerationCount() {
+	public static int getGenerationCount() {
 		return count;
 	}
 	@Override
