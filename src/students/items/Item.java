@@ -7,7 +7,7 @@ package students.items;
  */
 public abstract class Item {
 	
-	private int age, deathAge, maturationAge, monetaryValue;
+	protected int age, deathAge, maturationAge, monetaryValue;
 
 	/**
 	 * Initialize all the item's attributes
@@ -69,7 +69,9 @@ public abstract class Item {
 		}
 
 	}
-	
+	/**
+	 * Return the name of the Item
+	 */
 	public abstract String toString();
 	
 }
