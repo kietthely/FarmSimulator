@@ -36,11 +36,12 @@ public class Field {
 			for(int width = 0; width < myItemList[height].length; width++) {
 				Item currentItem = myItemList[height][width];
 				currentItem.tick();
-				// if it's Soil
+				// if it's Soil, turn into Weed
 				if(currentItem.toString().equals(".") && Math.random() < WEED_SPAWN_CHANCE) {
 					currentItem = new Weed();
 					
 				}
+				// if crops die, turn into Untilled
 				if(currentItem.died()){
 					currentItem = new UntilledSoil();
 				}
@@ -96,7 +97,10 @@ public class Field {
 	 * @param item
 	 */
 	public void plant(int height, int width, Item item) {
-		myItemList[height][width] = item;
+		if(myItemList[height][width].name() == "Soil") {
+			myItemList[height][width] = item;	
+		}
+		
 	}
 	/**
 	 * 
