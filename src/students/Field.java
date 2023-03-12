@@ -1,5 +1,7 @@
 package students;
 
+import java.util.HashMap;
+
 import students.items.*;
 /**
  * The world environment
@@ -32,14 +34,15 @@ public class Field {
 		// {(1,2,3),(1,2,3)}
 		for(int height =0; height < myItemList.length; height++) {
 			for(int width = 0; width < myItemList[height].length; width++) {
-				myItemList[height][width].tick();
+				Item currentItem = myItemList[height][width];
+				currentItem.tick();
 				// if it's Soil
-				if(myItemList[height][width].toString().equals(".") && Math.random() < WEED_SPAWN_CHANCE) {
-						myItemList[height][width] = new Weed();
+				if(currentItem.toString().equals(".") && Math.random() < WEED_SPAWN_CHANCE) {
+					currentItem = new Weed();
 					
 				}
-				if(myItemList[height][width].died()){
-					myItemList[height][width] = new UntilledSoil();
+				if(currentItem.died()){
+					currentItem = new UntilledSoil();
 				}
 			}
 		}
@@ -56,9 +59,9 @@ public class Field {
 		}
 		
 		for(int height = 0; height < myItemList[0].length; height++) {
-			environment += "\n";
-			for(int width = 0; width <myItemList[width].length; width++) {
-				environment += (height+1) + myItemList[height][width].toString();
+			environment += "\n " + (height+1);
+			for(int width = 0; width <myItemList.length; width++) {
+				environment +=  myItemList[height][width].toString();
 			}
 		}
 		return environment;
@@ -112,8 +115,39 @@ public class Field {
 	 */
 	public String getSummary() {
 		String summary ="";
-		//TODO: Finish getSummary()
-		summary += "Apples: " + String.format("%" + (25-"Apples: ".length()) +"s", "");
+		int totalCost =0;
+		// HashMap - name of the class is the key, the number of the occurrence of the class is the value
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		// initialize my map
+		map.put("Apples", 0);
+		map.put("Grain", 0);
+		map.put("Soil", 0);
+		map.put("Untilled Soil", 0);
+		map.put("Weed", 0);
+		
+		
+		// loop through the entire array to count different items.
+		for(int height = 0; height < myItemList[0].length; height++) {
+			for(int width = 0; width < myItemList.length; width++) {
+				Item currentItem = myItemList[height][width];
+				// update the map
+				if(map.containsKey(currentItem.name())){
+					map.put(currentItem.name(), map.get(currentItem.name()) +1);
+				}
+				// retrieve the cost of the food item
+				if(currentItem instanceof Food) {
+					totalCost += ((Food) currentItem).getCost();
+				}
+			}
+		}
+		
+		// print out the quantities
+		for(String i : map.keySet()) {
+			summary += i + String.format("%" +  (25-i.length()) + "s", map.get(i)) + "\n";
+		}
+		summary += "For a total of " + String.format("%" + (25- "For a total of ".length()) + "s", totalCost) + "\n";
+		summary += "Total apples created: " + String.format("%" + (25- "Total apples created: ".length()) + "s", Apples.getGenerationCount()) + "\n";
+		summary += "Total grain created: " + String.format("%" + (25- "Total grain created: ".length()) + "s", Grain.getGenerationCount()) + "\n";
 		return summary;
 	}
 }

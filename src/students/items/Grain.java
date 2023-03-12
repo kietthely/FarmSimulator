@@ -8,7 +8,7 @@ package students.items;
 public class Grain extends Food{
 	
 	private static int count =0;
-	final int COST = 1;
+	final static int COST = 1;
 	public Grain () {
 		super(2,6,2);
 		count+=1;

@@ -36,7 +36,7 @@ public class UntilledSoil extends Item {
 
 	@Override
 	public String name() {
-		return "UntilledSoil";
+		return "Untilled Soil";
 	}
 	
 	
