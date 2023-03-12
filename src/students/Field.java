@@ -54,14 +54,17 @@ public class Field {
 	public String toString() {
 		String environment =" ";
 		
-		for(int i = 1; i <myItemList[0].length +1; i++) {
-			environment += i;
+		for(int width = 0; width < myItemList[0].length; width++ ) {
+			environment += String.format("%1$6s", width+1);
 		}
+
 		
-		for(int height = 0; height < myItemList[0].length; height++) {
-			environment += "\n " + (height+1);
-			for(int width = 0; width <myItemList.length; width++) {
-				environment +=  myItemList[height][width].toString();
+		for(int height = 0; height < myItemList.length; height++) {
+			environment += "\n" + (height+1);
+			for(int width = 0; width <myItemList[height].length; width++) {
+				String symbol = myItemList[height][width].toString();
+				environment += String.format("%1$6s", symbol);
+				
 			}
 		}
 		return environment;
@@ -101,8 +104,8 @@ public class Field {
 	 */
 	public int getValue() {
 		int totalMonetaryValue = 0;
-		for(int height = 0; height < myItemList[0].length; height++) {
-			for(int width = 0; width < myItemList.length; width++) {
+		for(int height = 0; height < myItemList.length; height++) {
+			for(int width = 0; width < myItemList[height].length; width++) {
 				totalMonetaryValue += myItemList[height][width].getValue();
 			}
 		}
@@ -127,8 +130,8 @@ public class Field {
 		
 		
 		// loop through the entire array to count different items.
-		for(int height = 0; height < myItemList[0].length; height++) {
-			for(int width = 0; width < myItemList.length; width++) {
+		for(int height = 0; height < myItemList.length; height++) {
+			for(int width = 0; width < myItemList[height].length; width++) {
 				Item currentItem = myItemList[height][width];
 				// update the map
 				if(map.containsKey(currentItem.name())){
