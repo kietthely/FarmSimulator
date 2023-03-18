@@ -37,13 +37,13 @@ public class Field {
 				Item currentItem = myItemList[height][width];
 				currentItem.tick();
 				// if it's Soil, turn into Weed
-				if(currentItem.toString().equals(".") && Math.random() < WEED_SPAWN_CHANCE) {
-					currentItem = new Weed();
-					
+				if(currentItem.toString().equals(".") && Math.random() <= WEED_SPAWN_CHANCE) {
+					plant(height, width, new Weed());
+
 				}
-				// if crops die, turn into Untilled
+				// if crops die, turn into UntilledSoil
 				if(currentItem.died()){
-					currentItem = new UntilledSoil();
+					plant(height, width, new UntilledSoil());
 				}
 			}
 		}
@@ -57,6 +57,7 @@ public class Field {
 		
 		for(int width = 0; width < myItemList[0].length; width++ ) {
 			environment += String.format("%1$6s", width+1);
+			
 		}
 
 		
@@ -64,7 +65,10 @@ public class Field {
 			environment += "\n" + (height+1);
 			for(int width = 0; width <myItemList[height].length; width++) {
 				String symbol = myItemList[height][width].toString();
+
+
 				environment += String.format("%1$6s", symbol);
+
 				
 			}
 		}
@@ -97,10 +101,7 @@ public class Field {
 	 * @param item
 	 */
 	public void plant(int height, int width, Item item) {
-		if(myItemList[height][width].name() == "Soil") {
-			myItemList[height][width] = item;	
-		}
-		
+		myItemList[height][width] = item;	
 	}
 	/**
 	 * 
@@ -123,7 +124,7 @@ public class Field {
 	public String getSummary() {
 		String summary ="";
 		int totalCost =0;
-		// HashMap - name of the class is the key, the number of the occurrence of the class is the value
+		// HashMap - name of the class is the key, the number of the occurrences of the class is the value
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		// initialize my map
 		map.put("Apples", 0);
