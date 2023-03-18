@@ -30,7 +30,7 @@ public class Farm {
 		// print the field and the options
 		Scanner input = new Scanner(System.in);
 		while (!action.equals("q")) {
-
+			//TODO: Display the field and the user balance.
 			System.out.println("Balance: "+getBalance());
 			System.out.println(world.toString());
 			System.out.println(availableActions());
@@ -39,8 +39,11 @@ public class Farm {
 				action = selection[0];
 				dx = Integer.parseInt(selection[1]) -1;
 				dy = Integer.parseInt(selection[2]) -1;
-			} else {
+			} else if(selection.length == 1) {
 				action = selection[0];
+			} else {
+				System.out.println("Invalid inputs!");
+				continue;
 			}
 			
 			if(dx >= x || dy >= y) {
@@ -48,10 +51,10 @@ public class Farm {
 				continue;
 			}
 			switch(action) {
-			case "t": // till
+			case "t": //TODO:  till
 				world.till(x, y);
 				break;
-			case "h": // harvest
+			case "h": //TODO:  harvest
 				world.get(dx, dy);
 				break;
 			case "p": // plant
@@ -85,7 +88,6 @@ public class Farm {
 				break;
 			case "w":
 				break;
-
 			case "q":
 				break;
 			default:
@@ -109,6 +111,11 @@ public class Farm {
 			balance -= income;
 		}
 	}
+	/**
+	 * Check if the user can buy something
+	 * @param cost to buy
+	 * @return true if sufficient, false otherwise.
+	 */
 	public boolean isSufficient(int cost) {
 		if (balance - cost >= 0) {
 			return true;
@@ -119,6 +126,10 @@ public class Farm {
 	public int getBalance() {
 		return balance;
 	}
+	/**
+	 * Display all the available options
+	 * @return a string that represents all the options that user can do
+	 */
 	public String availableActions() {
 		String options;
 		options = "Enter your next action: "

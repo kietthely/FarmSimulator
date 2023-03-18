@@ -22,14 +22,7 @@ public class Grain extends Food{
 	public static int getGenerationCount() {
 		return count;
 	}
-	@Override
-	public int getCost() {
-		if(age > maturationAge) {
-			return COST;
-		} else {
-			return 0;
-		}
-	}
+
 	
 	@Override
 	public String toString() {

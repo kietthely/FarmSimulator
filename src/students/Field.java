@@ -142,10 +142,7 @@ public class Field {
 				if(map.containsKey(currentItem.name())){
 					map.put(currentItem.name(), map.get(currentItem.name()) +1);
 				}
-				// retrieve the cost of the food item
-				if(currentItem instanceof Food) {
-					totalCost += ((Food) currentItem).getCost();
-				}
+				totalCost += currentItem.getValue();
 			}
 		}
 		

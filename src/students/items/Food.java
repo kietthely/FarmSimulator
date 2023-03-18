@@ -19,6 +19,6 @@ public abstract class Food extends Item {
 	public String toString() {
 		return "Food";
 	}
-	public abstract int getCost();
+
 	
 }

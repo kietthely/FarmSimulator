@@ -44,14 +44,7 @@ public class Apples extends Food {
 		return "Apples";
 	}
 
-	@Override
-	public int getCost() {
-		if(age > maturationAge) {
-			return COST;
-		} else {
-			return 0;
-		}
-	}
+
 	
 	
 	
