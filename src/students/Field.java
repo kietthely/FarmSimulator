@@ -80,10 +80,14 @@ public class Field {
 	 * @param width
 	 */
 	public void till(int height, int width) {
-		myItemList[height][width] = new Soil();
+		myItemList[height][width] = new UntilledSoil();
 		
 	}
-	
+	public int harvest(int height, int width) {
+		int value = myItemList[height][width].getValue();
+		myItemList[height][width] = new Soil();
+		return value;
+	}
 	/**
 	 * Return a copy of the item at the given location
 	 * @param height

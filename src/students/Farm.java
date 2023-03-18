@@ -1,9 +1,11 @@
 package students;
 
+import java.util.HashMap;
 import java.util.Scanner;
 
 import students.items.Apples;
 import students.items.Grain;
+import students.items.Item;
 
 
 /**
@@ -12,92 +14,121 @@ import students.items.Grain;
 public class Farm {
 	private int balance, x, y;
 	protected Field world;
+	private HashMap<String, Integer> shop;
 	// hashmap shop to get a list of Food items.
+	/**
+	 * Initialize shop and the world
+	 * @param fieldHeight
+	 * @param fieldWidth
+	 * @param startingFunds
+	 */
 	public Farm(int fieldHeight, int fieldWidth, int startingFunds)
 	{
 		world = new Field(fieldHeight, fieldWidth);
 		balance = startingFunds;
 		x = fieldHeight;
 		y = fieldWidth;
+		shop = new HashMap<String, Integer>();
+		shop.put("a", 2);
+		shop.put("g", 1);
 	}
-	
+
 	public void run()
 	{	
 		String action ="";
 		int dx = 0;
 		int dy = 0;
-
-		// print the field and the options
 		Scanner input = new Scanner(System.in);
+		
 		while (!action.equals("q")) {
-			//TODO: Display the field and the user balance.
-			System.out.println("Balance: "+getBalance());
-			System.out.println(world.toString());
-			System.out.println(availableActions());
+			displayField();
 			String[] selection = input.nextLine().split(" ");
+
 			if(selection.length == 3) {
 				action = selection[0];
-				dx = Integer.parseInt(selection[1]) -1;
-				dy = Integer.parseInt(selection[2]) -1;
-			} else if(selection.length == 1) {
+				try {
+					dx = Integer.parseInt(selection[1]) -1;
+					dy = Integer.parseInt(selection[2]) -1;
+				} catch (NumberFormatException ex) {
+					System.out.println("Your location inputs are in wrong format ");
+					continue;
+				}
+				} else if(selection.length == 1) {
 				action = selection[0];
 			} else {
 				System.out.println("Invalid inputs!");
 				continue;
 			}
-			
 			if(dx >= x || dy >= y) {
 				System.out.println("Invalid coordinates. Please get a bigger farm.");
 				continue;
 			}
+			
 			switch(action) {
-			case "t": //TODO:  till
-				world.till(x, y);
+			case "t":
+				world.till(dx, dy);
 				break;
-			case "h": //TODO:  harvest
-				world.get(dx, dy);
+			case "h": 
+				int value = world.harvest(dx,dy);
+				money(value, true);
 				break;
 			case "p": // plant
 				System.out.println("Enter: \n- 'a' to buy an apple for $ \n- 'g' to buy grain for ");
 				String food = input.nextLine().trim();
-				switch(food) {
-				case "a":
-					if(isSufficient(2)) {
-						money(2, false);
-						world.plant(dx, dy, new Apples());
-					} else {
-						System.out.println("Insufficient balance");
-					}
-					break;
-				case "g":
-					if(isSufficient(2)) {
-						money(1, false);
-						world.plant(dx, dy, new Grain());
-					} else {
-						System.out.println("Insufficient balance");
-					}
-					break;
-				default:
-					System.out.println("Invalid item to plant");
-				}
+				plantAction(food, dx, dy);
 				break;
 			case "s":
-				// summary
-				// print balance
-				world.getSummary();
-				break;
+				System.out.println(world.getSummary());
+				continue;
 			case "w":
 				break;
 			case "q":
 				break;
 			default:
-					System.out.println("Wrong input");
+				System.out.println("Invalid inputs!");
 			}
 			world.tick();
 		}
 
 		input.close();
+	}
 
+	/**
+	 * Handle plant() function
+	 * @param food to plant
+	 * @param xAxis x-coordinate
+	 * @param yAxis y-coordinate
+	 */
+	public void plantAction(String food, int xAxis, int yAxis) {
+		switch(food) {
+		case "a":
+			if(isSufficient(2)) {
+				money(2, false);
+				world.plant(xAxis, yAxis, new Apples());
+			} else {
+				System.out.println("Insufficient balance");
+			}
+			break;
+		case "g":
+			if(isSufficient(2)) {
+				money(1, false);
+				world.plant(xAxis, yAxis, new Grain());
+			} else {
+				System.out.println("Insufficient balance");
+			}
+			break;
+		default:
+			System.out.println("Invalid item to plant");
+		}
+		
+	}
+	/**
+	 * Display the field
+	 */
+	public void displayField() {
+		System.out.println("Balance: "+getBalance());
+		System.out.println(world.toString());
+		System.out.println(availableActions());
 	}
 	/**
 	 * Update your balance
