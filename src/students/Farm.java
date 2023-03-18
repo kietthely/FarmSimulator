@@ -72,7 +72,7 @@ public class Farm {
 				int value = world.harvest(dx,dy);
 				money(value, true);
 				break;
-			case "p": // plant
+			case "p":
 				System.out.println("Enter: \n- 'a' to buy an apple for $ \n- 'g' to buy grain for ");
 				String food = input.nextLine().trim();
 				plantAction(food, dx, dy);

@@ -44,6 +44,9 @@ public abstract class Item {
 			return false;
 		}
 	}
+	public boolean needUntilledSoil() {
+		return false;
+	}
 	/**
 	 * Return monetary value if it's ready to harvest otherwise returns 0
 	 * @return monetaryValue

@@ -80,7 +80,7 @@ public class Field {
 	 * @param width
 	 */
 	public void till(int height, int width) {
-		myItemList[height][width] = new UntilledSoil();
+		myItemList[height][width] = new Soil();
 		
 	}
 	public int harvest(int height, int width) {
@@ -157,6 +157,7 @@ public class Field {
 		summary += "For a total of " + String.format("%" + (25- "For a total of ".length()) + "s", totalCost) + "\n";
 		summary += "Total apples created: " + String.format("%" + (25- "Total apples created: ".length()) + "s", Apples.getGenerationCount()) + "\n";
 		summary += "Total grain created: " + String.format("%" + (25- "Total grain created: ".length()) + "s", Grain.getGenerationCount()) + "\n";
+		summary += "Total peach created: " + String.format("%" + (25- "Total peach created: ".length()) + "s", Peach.getGenerationCount()) + "\n";
 		return summary;
 	}
 }
