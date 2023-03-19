@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 import students.items.Apples;
 import students.items.Grain;
-import students.items.Item;
+import students.items.Peach;
+
 
 
 /**
@@ -15,6 +16,8 @@ public class Farm {
 	private int balance, x, y;
 	protected Field world;
 	private HashMap<String, Integer> shop;
+
+
 	// hashmap shop to get a list of Food items.
 	/**
 	 * Initialize shop and the world
@@ -31,6 +34,8 @@ public class Farm {
 		shop = new HashMap<String, Integer>();
 		shop.put("a", 2);
 		shop.put("g", 1);
+		shop.put("p", 7);
+
 	}
 
 	public void run()
@@ -40,7 +45,7 @@ public class Farm {
 		int dy = 0;
 		Scanner input = new Scanner(System.in);
 		
-		while (!action.equals("q")) {
+		while (!action.equals("q")) { 
 			displayField();
 			String[] selection = input.nextLine().split(" ");
 
@@ -73,7 +78,9 @@ public class Farm {
 				money(value, true);
 				break;
 			case "p":
-				System.out.println("Enter: \n- 'a' to buy an apple for $ \n- 'g' to buy grain for ");
+				System.out.println("Enter: \n- 'a' to buy an apple for $" + shop.get("a") + 
+						"\n- 'g' to buy grain for $" + shop.get("g") + 
+						"\n- 'p' to buy a peach for $" + shop.get("p"));
 				String food = input.nextLine().trim();
 				plantAction(food, dx, dy);
 				break;
@@ -85,7 +92,7 @@ public class Farm {
 			case "q":
 				break;
 			default:
-				System.out.println("Invalid inputs!");
+				System.out.println("Invalid action!");
 			}
 			world.tick();
 		}
@@ -110,9 +117,17 @@ public class Farm {
 			}
 			break;
 		case "g":
-			if(isSufficient(2)) {
+			if(isSufficient(1)) {
 				money(1, false);
 				world.plant(xAxis, yAxis, new Grain());
+			} else {
+				System.out.println("Insufficient balance");
+			}
+			break;
+		case "p":
+			if(isSufficient(7)) {
+				money(7, false);
+				world.plant(xAxis, yAxis, new Peach());
 			} else {
 				System.out.println("Insufficient balance");
 			}

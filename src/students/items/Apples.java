@@ -5,7 +5,7 @@ package students.items;
  */
 public class Apples extends Food {
 	private static int count;
-	final static int COST =2;
+
 	public Apples () {
 		super(3,5,3);
 		count +=1;

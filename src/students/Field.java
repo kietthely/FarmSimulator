@@ -19,8 +19,6 @@ public class Field {
 	public Field(int height, int width)
 	{
 		myItemList = new Item[height][width];
-		// 3x2
-		// 
 		for(int i =0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
 				myItemList[i][j] = new Soil();
@@ -74,6 +72,12 @@ public class Field {
 		}
 		return environment;
 	}
+	public void disasterEvent() {
+		//Grasshoppers -- destroy 50% crops
+		
+		// flood -- destroy 80% crops -- 0.1% destroy the field
+	}
+	
 	/**
 	 * Turn Item at the location into Soil
 	 * @param height
@@ -105,7 +109,11 @@ public class Field {
 	 * @param item
 	 */
 	public void plant(int height, int width, Item item) {
-		myItemList[height][width] = item;	
+		if(!myItemList[height][width].toString().equals("/")) {
+			myItemList[height][width] = item;	
+		} else {
+			System.out.println("Cannot be planted into untilled soil");
+		}
 	}
 	/**
 	 * 

@@ -37,7 +37,7 @@ public abstract class Item {
 	}
 	
 	public boolean died() {
-		if(age > deathAge) {		
+		if(age >= deathAge) {		
 			return true;
 		}
 		else {
