@@ -13,7 +13,7 @@ public class WeatherTotem extends Totem {
 		newWeatherTotem.age = age;
 		return newWeatherTotem;
 	}
-
+	
 	@Override
 	public String name() {
 		return "Weather Totem";

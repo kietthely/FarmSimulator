@@ -5,11 +5,13 @@ import java.util.HashMap;
 import students.items.*;
 /**
  * The world environment
- *
+ * waterLevel determines the status of the field. If waterLevel is > 10, there will be a great chance of having *flood* event.
+ * If waterLevel is < -10, there will be a great chance of having *drought* event.
+ * Normally the waterLevel will be decreased by 1 for each turn. Its value would only increase when there's *raining* event going on.
  */
 public class Field {
 	private final double WEED_SPAWN_CHANCE = 0.2;
-
+	private int waterLevel;
 	private Item[][] myItemList;
 	/**
 	 * Initialize the environment
@@ -24,6 +26,7 @@ public class Field {
 				myItemList[i][j] = new Soil();
 			}
 		}
+		waterLevel = 0;
 	}
 	/**
 	 * The world is running
@@ -34,6 +37,9 @@ public class Field {
 			for(int width = 0; width < myItemList[height].length; width++) {
 				Item currentItem = myItemList[height][width];
 				currentItem.tick();
+				// TODO waterLevel logic
+				losingHumidity();
+
 				// if it's Soil, turn into Weed
 				if(currentItem.toString().equals(".") && Math.random() <= WEED_SPAWN_CHANCE) {
 					plant(height, width, new Weed());
@@ -45,6 +51,17 @@ public class Field {
 				}
 			}
 		}
+	}
+	/**
+	 * Increase water level
+	 * @param water
+	 */
+	public void increaseWaterLevelBy(int water) {
+		waterLevel += water;
+	}
+	
+	public void losingHumidity() {
+		waterLevel -= 1;
 	}
 	/**
 	 * Print the world
@@ -72,12 +89,7 @@ public class Field {
 		}
 		return environment;
 	}
-	public void disasterEvent() {
-		//Grasshoppers -- destroy 50% crops
-		
-		// flood -- destroy 80% crops -- 0.1% destroy the field
-	}
-	
+
 	/**
 	 * Turn Item at the location into Soil
 	 * @param height

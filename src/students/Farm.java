@@ -1,22 +1,22 @@
 package students;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import students.items.Apples;
-import students.items.Grain;
-import students.items.Peach;
+import students.items.*;
 
 
 
 /**
  * Farm simulator
+ * A player will have 10 slots of items in their backpack.
  */
 public class Farm {
 	private int balance, x, y;
 	protected Field world;
 	private HashMap<String, Integer> shop;
-
+	private ArrayList<Item> inventory;
 
 	// hashmap shop to get a list of Food items.
 	/**
@@ -35,17 +35,22 @@ public class Farm {
 		shop.put("a", 2);
 		shop.put("g", 1);
 		shop.put("p", 7);
-
+		shop.put("w", 2);
+		inventory = new ArrayList<Item>();
 	}
 
 	public void run()
 	{	
+
+		System.out.println(String.format("%s", "*".repeat(30)) + "\nEnjoy the game! :) \n" + String.format("%s", "*".repeat(30)));
 		String action ="";
 		int dx = 0;
 		int dy = 0;
 		Scanner input = new Scanner(System.in);
-		
 		while (!action.equals("q")) { 
+			System.out.println("\n" + String.format("%s", "*".repeat(70)));
+			System.out.println(String.format("%s", "*".repeat(70)));
+
 			displayField();
 			String[] selection = input.nextLine().split(" ");
 
@@ -78,11 +83,22 @@ public class Farm {
 				money(value, true);
 				break;
 			case "p":
-				System.out.println("Enter: \n- 'a' to buy an apple for $" + shop.get("a") + 
-						"\n- 'g' to buy grain for $" + shop.get("g") + 
-						"\n- 'p' to buy a peach for $" + shop.get("p"));
+				listOfFood();
 				String food = input.nextLine().trim();
 				plantAction(food, dx, dy);
+				break;
+			case "b":
+				listOfTotems();
+				String totem = input.nextLine().trim();
+				buyTotem(totem);
+				break;
+			case "u":
+				for(int i = 0; i < inventory.size(); i++) {
+					if(inventory.get(i) instanceof Totem) {
+						inventory.remove(i);
+						break;
+					}
+				}
 				break;
 			case "s":
 				System.out.println(world.getSummary());
@@ -99,7 +115,34 @@ public class Farm {
 
 		input.close();
 	}
+	public void buyTotem(String totem) {
+		switch(totem) {
+		case "w":
+			inventory.add(new WeatherTotem());
+			break;
+		default:
+			System.out.println("We don't have this item in the shop!");
+		}
+	}
+	
+	/**
+	 * Display a list of food
+	 */
+	public void listOfFood() {
+		System.out.println("Enter: \n- 'a' to buy an apple for $" + shop.get("a") + 
+				"\n- 'g' to buy grain for $" + shop.get("g") + 
+				"\n- 'p' to buy a peach for $" + shop.get("p"));
+	}
+	/**
+	 * Display a list of totems
+	 */
+	public void listOfTotems () {
+		System.out.println("Enter: \n- 'w' to buy a weather totem for $" + shop.get("w"));
 
+	}
+	public void weatherEvent(int waterLevel) {
+		world.increaseWaterLevelBy(waterLevel);
+	}
 	/**
 	 * Handle plant() function
 	 * @param food to plant
@@ -142,6 +185,19 @@ public class Farm {
 	 */
 	public void displayField() {
 		System.out.println("Balance: "+getBalance());
+		String backpack = "Your Backpack: ";
+		String items = "";
+		boolean hasItem = false;
+		for(int i = 0; i < inventory.size(); i++) {
+			if(inventory.get(i) != null) {
+				hasItem = true;
+				items += "|  " + inventory.get(i).name() + "  |";
+			}
+		}
+		if(hasItem)
+			System.out.println(backpack + items);
+		else
+			System.out.println(backpack + "No items");
 		System.out.println(world.toString());
 		System.out.println(availableActions());
 	}
@@ -182,7 +238,15 @@ public class Farm {
 				+ "\n t x y: till"
 				+ "\n h x y: harvest"
 				+ "\n p x y: plant"
-				+ "\n s: field summary"
+				+ "\n b: buy a totem";
+		for(int i = 0; i < inventory.size(); i++) {
+			if(inventory.get(i) instanceof Totem) {
+				options += "\n u: use a totem";
+				break;
+			}
+		}
+		
+		options += "\n s: field summary"
 				+ "\n w: wait"
 				+ "\n q: quit";
 		return options;

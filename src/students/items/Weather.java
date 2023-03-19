@@ -1,6 +1,6 @@
 package students.items;
 
-import students.Field;
+
 /**
  * Weather class is responsible for generating different types of weather-related events i.e raining, flood, drought etc. 
  * For each player turn, tick() will be called to decides which type of weather will be in this turn.  
