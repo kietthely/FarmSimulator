@@ -54,7 +54,7 @@ public class Marker {
 		// Section THREE
 		// uncomment this section once you get to it
 		//remember, your farm should work on varies size fields (assuming all fields are less than 10x10)
-		Farm f = new Farm(10, 10, 10);
+		Farm f = new Farm(10, 5, 10);
 		f.run();
 		
 	}

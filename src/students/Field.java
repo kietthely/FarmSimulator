@@ -5,8 +5,8 @@ import java.util.HashMap;
 import students.items.*;
 /**
  * The world environment
- * waterLevel determines the status of the field. If waterLevel is > 10, there will be a great chance of having *flood* event.
- * If waterLevel is < -10, there will be a great chance of having *drought* event.
+ * waterLevel determines the status of the field. If waterLevel is > 20, there will be a great chance of having *flood* event.
+ * If waterLevel is < -20, there will be a great chance of having *drought* event.
  * Normally the waterLevel will be decreased by 1 for each turn. Its value would only increase when there's *raining* event going on.
  */
 public class Field {
@@ -33,13 +33,17 @@ public class Field {
 	 */
 	public void tick() {
 		// {(1,2,3),(1,2,3)}
+		
 		for(int height =0; height < myItemList.length; height++) {
 			for(int width = 0; width < myItemList[height].length; width++) {
 				Item currentItem = myItemList[height][width];
 				currentItem.tick();
-				// TODO waterLevel logic
-				losingHumidity();
 
+
+				{
+					// TODO events logic
+				}
+				
 				// if it's Soil, turn into Weed
 				if(currentItem.toString().equals(".") && Math.random() <= WEED_SPAWN_CHANCE) {
 					plant(height, width, new Weed());
@@ -51,17 +55,35 @@ public class Field {
 				}
 			}
 		}
+
+		losingHumidity();
 	}
 	/**
-	 * Increase water level
-	 * @param water
+	 * Increase/Decrease water level
+	 * @param water level that is going to be increased/decreased
 	 */
-	public void increaseWaterLevelBy(int water) {
+	public void updateWaterLevel(int water) {
 		waterLevel += water;
 	}
 	
+	/**
+	 * Set the water level in the soil back to the normal state.
+	 */
+	public void setWaterLevelToNormal() {
+		this.waterLevel = 1;
+	}
+	/**
+	 * Losing humidity each day
+	 */
 	public void losingHumidity() {
 		waterLevel -= 1;
+	}
+	/**
+	 * Return water level in the soil
+	 * @return
+	 */
+	public int getWaterLevel() {
+		return waterLevel;
 	}
 	/**
 	 * Print the world

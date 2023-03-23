@@ -10,14 +10,14 @@ import students.items.*;
 
 /**
  * Farm simulator
- * A player will have 10 slots of items in their backpack.
+ * A player will have lots of items in their backpack.
  */
 public class Farm {
 	private int balance, x, y;
 	protected Field world;
 	private HashMap<String, Integer> shop;
 	private ArrayList<Item> inventory;
-
+	private Weather weather;
 	// hashmap shop to get a list of Food items.
 	/**
 	 * Initialize shop and the world
@@ -37,6 +37,7 @@ public class Farm {
 		shop.put("p", 7);
 		shop.put("w", 2);
 		inventory = new ArrayList<Item>();
+		weather = new Weather();
 	}
 
 	public void run()
@@ -52,6 +53,13 @@ public class Farm {
 			System.out.println(String.format("%s", "*".repeat(70)));
 
 			displayField();
+			
+			{
+				// event
+				receiver(weather.event());
+				weather.displayWeatherStatus();
+			}
+			
 			String[] selection = input.nextLine().split(" ");
 
 			if(selection.length == 3) {
@@ -75,38 +83,43 @@ public class Farm {
 			}
 			
 			switch(action) {
-			case "t":
+			case "t": // till
 				world.till(dx, dy);
 				break;
-			case "h": 
+			case "h": // harvest
 				int value = world.harvest(dx,dy);
 				money(value, true);
 				break;
-			case "p":
+			case "p": // plant
 				listOfFood();
 				String food = input.nextLine().trim();
 				plantAction(food, dx, dy);
 				break;
-			case "b":
+			case "b": // buy items - i.e WeatherTotem
 				listOfTotems();
 				String totem = input.nextLine().trim();
 				buyTotem(totem);
 				break;
-			case "u":
-				for(int i = 0; i < inventory.size(); i++) {
-					if(inventory.get(i) instanceof Totem) {
-						inventory.remove(i);
-						break;
-					}
+			case "u": // use items
+				listOfUseActions();
+				try {
+					int itemPosition = Integer.parseInt(input.nextLine());
+					useItem(itemPosition);
+				} catch (NumberFormatException ex) {
+					// Lose 1 turn. You looking for a non-existent item for a whole day.
+					System.out.println("Non-existent item!");
+					continue;
 				}
+
 				break;
-			case "s":
+			case "s": // summarize
 				System.out.println(world.getSummary());
 				continue;
-			case "w":
+			case "w": // wait
 				break;
-			case "q":
+			case "q": // quit
 				break;
+
 			default:
 				System.out.println("Invalid action!");
 			}
@@ -115,6 +128,45 @@ public class Farm {
 
 		input.close();
 	}
+	/**
+	 * Receive the event and update the water level in the soil.
+	 * @param moistureLevel in the soil
+	 */
+	public void receiver(int moistureLevel) {
+		world.updateWaterLevel(moistureLevel);
+	}
+	/**
+	 * Use an item depending on the position of the item in the inventory
+	 * @param position of the item
+	 */
+	public void useItem(int position) {
+
+
+		try {
+			if (inventory.get(position -1) instanceof Totem) {
+				inventory.remove(position -1);
+				world.setWaterLevelToNormal();
+			}
+		} catch (IndexOutOfBoundsException e){
+			System.out.println("You don't have this item!");
+		}
+		
+
+	} 
+	/**
+	 * List all of use items actions
+	 */
+	public void listOfUseActions() {
+		for(int i = 0; i< inventory.size(); i++) {
+			System.out.println("Enter: \n- '" + (i+1) + "' to use a(an) " + inventory.get(i).name());
+			
+		}
+		
+	}
+	/**
+	 * Buy a totem
+	 * @param totem item
+	 */
 	public void buyTotem(String totem) {
 		switch(totem) {
 		case "w":
@@ -140,9 +192,7 @@ public class Farm {
 		System.out.println("Enter: \n- 'w' to buy a weather totem for $" + shop.get("w"));
 
 	}
-	public void weatherEvent(int waterLevel) {
-		world.increaseWaterLevelBy(waterLevel);
-	}
+
 	/**
 	 * Handle plant() function
 	 * @param food to plant
@@ -184,7 +234,7 @@ public class Farm {
 	 * Display the field
 	 */
 	public void displayField() {
-		System.out.println("Balance: "+getBalance());
+		System.out.println("Balance: "+getBalance() + String.format("%20s","Water Level: " + world.getWaterLevel()));
 		String backpack = "Your Backpack: ";
 		String items = "";
 		boolean hasItem = false;
