@@ -4,8 +4,14 @@ package students.items;
  * 
  */
 public class Apples extends Food {
+	/**
+	 * The number of Apples objects has been created
+	 */
 	private static int count;
-
+	/**
+	 * Apple
+	 * maturationAge = 3, deathAge = 5, value = 3
+	 */
 	public Apples () {
 		super(3,5,3);
 		count +=1;
@@ -13,7 +19,7 @@ public class Apples extends Food {
 	
 	/**
 	 * Get the number of apple objects that have been created in this world.
-	 * @return count
+	 * @return count.The number of generation of Apples
 	 */
 	public static int getGenerationCount() {
 		return count;

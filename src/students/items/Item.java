@@ -6,7 +6,12 @@ package students.items;
  * 
  */
 public abstract class Item {
-	
+	/**
+	 * @age The current age of the item.
+	 * @deathAge The death age of the item.
+	 * @maturationAge The age for an Item to be fully grown up.
+	 * @monetaryValue The value of the Item after fully grown up.
+	 */
 	protected int age, deathAge, maturationAge, monetaryValue;
 
 	/**

@@ -1,7 +1,17 @@
 package students.items;
-
+/**
+ * Peach class. A long-season crop. 
+ *
+ */
 public class Peach extends Food{
+	/**
+	 * The number of Peach objects has been created
+	 */
 	private static int count;
+	/**
+	 * Peach
+	 * maturation = 10, deathAge = 25, value = 12
+	 */
 	public Peach () {
 		super(10,25, 12);
 		count +=1;
@@ -9,7 +19,7 @@ public class Peach extends Food{
 	
 	/**
 	 * Get the number of apple objects that have been created in this world.
-	 * @return count
+	 * @return count. The number of Peach objects has been created
 	 */
 	public static int getGenerationCount() {
 		return count;

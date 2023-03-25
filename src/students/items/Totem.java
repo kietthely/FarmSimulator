@@ -5,6 +5,9 @@ package students.items;
  * All types of Totem cannot die
  */
 public abstract class Totem extends Item {
+	/**
+	 * Totem can be used as an Item in the player inventory. Its uses may vary.
+	 */
 	public Totem() {
 		super(Integer.MAX_VALUE, Integer.MAX_VALUE, -1);
 	}

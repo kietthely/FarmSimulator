@@ -6,9 +6,14 @@ package students.items;
  *
  */
 public class Grain extends Food{
-	
+	/**
+	 * The number of Grain objects has been created
+	 */
 	private static int count =0;
-
+	/**
+	 * Grain
+	 * maturationAge = 2, deathAge = 6, value = 2
+	 */
 	public Grain () {
 		super(2,6,2);
 		count+=1;
@@ -17,7 +22,7 @@ public class Grain extends Food{
 
 	/**
 	 * Get the number of grain objects that have been created in this world.
-	 * @return count
+	 * @return count. The number of Apples objects has been created
 	 */
 	public static int getGenerationCount() {
 		return count;

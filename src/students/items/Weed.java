@@ -5,7 +5,7 @@ package students.items;
 public class Weed extends Item
 {	
 	/**
-	 * It nearly has infinite age, however, it still can crash on theory since it eventually
+	 * Weed nearly has infinite age, however, it still can crash on theory since it eventually
 	 * will jump back to negative value and then keep incrementing to nearly max positive value
 	 * i.e the tick() method needs to be invoked 2147483647 times to get crashed.
 	 */

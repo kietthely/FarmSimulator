@@ -13,10 +13,33 @@ import students.items.*;
  * A player will have lots of items in their backpack.
  */
 public class Farm {
-	private int balance, x, y;
+	/**
+	 * Player's bank
+	 */
+	private int balance;
+	/**
+	 * Farm's width
+	 */
+	private int x;
+	/**
+	 * Farm's height
+	 */
+	private int y;
+	/**
+	 * Farm's environment object
+	 */
 	protected Field world;
+	/**
+	 * Food store
+	 */
 	private HashMap<String, Integer> shop;
+	/**
+	 * Player inventory
+	 */
 	private ArrayList<Item> inventory;
+	/**
+	 * Weather
+	 */
 	private Weather weather;
 	// hashmap shop to get a list of Food items.
 	/**
@@ -29,8 +52,8 @@ public class Farm {
 	{
 		world = new Field(fieldHeight, fieldWidth);
 		balance = startingFunds;
-		x = fieldHeight;
-		y = fieldWidth;
+		y = fieldHeight;
+		x = fieldWidth;
 		shop = new HashMap<String, Integer>();
 		shop.put("a", 2);
 		shop.put("g", 1);
@@ -39,34 +62,42 @@ public class Farm {
 		inventory = new ArrayList<Item>();
 		weather = new Weather();
 	}
-
+	/**
+	 * Run the farm simulator
+	 */
 	public void run()
 	{	
 
 		System.out.println(String.format("%s", "*".repeat(30)) + "\nEnjoy the game! :) \n" + String.format("%s", "*".repeat(30)));
 		String action ="";
-		int dx = 0;
-		int dy = 0;
+		int height = 0;
+		int width = 0;
 		Scanner input = new Scanner(System.in);
 		while (!action.equals("q")) { 
 			System.out.println("\n" + String.format("%s", "*".repeat(70)));
 			System.out.println(String.format("%s", "*".repeat(70)));
-
+			
+			receiver(weather.event()); // receive events from the Weather
+			if (world.isFieldDestroyed()) {
+				 
+				System.out.println("\n GAME OVER! \n"
+						+ " You lost because the farm was destroyed due to " + weather.occurredDisaster()+". \n");
+				System.out.println("\n" + String.format("%s", "*".repeat(70)));
+				System.out.println(String.format("%s", "*".repeat(70)));
+				break;
+			}
+			System.out.println(weather.weatherStatus());
+			
 			displayField();
 			
-			{
-				// event
-				receiver(weather.event());
-				weather.displayWeatherStatus();
-			}
 			
 			String[] selection = input.nextLine().split(" ");
 
 			if(selection.length == 3) {
 				action = selection[0];
 				try {
-					dx = Integer.parseInt(selection[1]) -1;
-					dy = Integer.parseInt(selection[2]) -1;
+					height = Integer.parseInt(selection[1]) -1;
+					width = Integer.parseInt(selection[2]) -1;
 				} catch (NumberFormatException ex) {
 					System.out.println("Your location inputs are in wrong format ");
 					continue;
@@ -77,23 +108,23 @@ public class Farm {
 				System.out.println("Invalid inputs!");
 				continue;
 			}
-			if(dx >= x || dy >= y) {
+			if(width >= x || height >= y) {
 				System.out.println("Invalid coordinates. Please get a bigger farm.");
 				continue;
 			}
 			
 			switch(action) {
 			case "t": // till
-				world.till(dx, dy);
+				world.till(height, width);
 				break;
 			case "h": // harvest
-				int value = world.harvest(dx,dy);
+				int value = world.harvest(height,width);
 				money(value, true);
 				break;
 			case "p": // plant
 				listOfFood();
 				String food = input.nextLine().trim();
-				plantAction(food, dx, dy);
+				plantAction(food, height, width);
 				break;
 			case "b": // buy items - i.e WeatherTotem
 				listOfTotems();
@@ -196,15 +227,15 @@ public class Farm {
 	/**
 	 * Handle plant() function
 	 * @param food to plant
-	 * @param xAxis x-coordinate
-	 * @param yAxis y-coordinate
+	 * @param height y-coordinate
+	 * @param width x-coordinate
 	 */
-	public void plantAction(String food, int xAxis, int yAxis) {
+	public void plantAction(String food, int height, int width) {
 		switch(food) {
 		case "a":
 			if(isSufficient(2)) {
 				money(2, false);
-				world.plant(xAxis, yAxis, new Apples());
+				world.plant(height, width, new Apples());
 			} else {
 				System.out.println("Insufficient balance");
 			}
@@ -212,7 +243,7 @@ public class Farm {
 		case "g":
 			if(isSufficient(1)) {
 				money(1, false);
-				world.plant(xAxis, yAxis, new Grain());
+				world.plant(height, width, new Grain());
 			} else {
 				System.out.println("Insufficient balance");
 			}
@@ -220,7 +251,7 @@ public class Farm {
 		case "p":
 			if(isSufficient(7)) {
 				money(7, false);
-				world.plant(xAxis, yAxis, new Peach());
+				world.plant(height, width, new Peach());
 			} else {
 				System.out.println("Insufficient balance");
 			}

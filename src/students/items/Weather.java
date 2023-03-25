@@ -11,13 +11,41 @@ package students.items;
  * Drought will decrease it by 5 
  */
 public class Weather {
+	/**
+	 * The probability of raining in the world.
+	 */
 	final double RAINING_CHANCE = 0.4;
+	/**
+	 * The probability of having flood in the world.
+	 */
 	final double FLOOD_CHANCE = 0.01;
+	/**
+	 * The probability of having drought in the world.
+	 */
 	final double DROUGHT_CHANCE =  0.04;
-	final int DROUGHT_WATER_LEVEL = -5;
-	final int FLOOD_WATER_LEVEL = 5;
+	/**
+	 * The water level after the drought happened
+	 */
+	final int DROUGHT_WATER_LEVEL = -10;
+	/**
+	 * The water level after the flood happened
+	 */
+	final int FLOOD_WATER_LEVEL = 10;
+	/**
+	 * The water level after raining
+	 */
 	final int RAIN_WATER_LEVEL = 2;
+	/**
+	 * The current weather status
+	 */
 	String weatherStatus;
+	/**
+	 * The disaster that happened in the world
+	 */
+	String disaster;
+	/**
+	 * Weather events handler
+	 */
 	public Weather() {
 		weatherStatus = "It's a normal day today";
 	}
@@ -31,20 +59,34 @@ public class Weather {
 		int waterLevel = 0; 
 		if (event <= FLOOD_CHANCE) {
 			waterLevel = FLOOD_WATER_LEVEL;
-			weatherStatus = "Unfortunely, we have a flood on our farm";
+			weatherStatus = "Oh no!, we have a flood on our farm";
+			disaster = "flood";
 		} else if (event <= DROUGHT_CHANCE) {
 			waterLevel = DROUGHT_WATER_LEVEL;
-			weatherStatus = "The soil moisture in our farm is decreasing dramatically due to the drought.";
-			
+			weatherStatus = "Noo!, there's a drought happening on our farm";
+			disaster = "drought";
 		} else if (event <= RAINING_CHANCE) {
 			waterLevel = RAIN_WATER_LEVEL;
 			weatherStatus = "Yay! It's raining today.";
+			disaster = "heavy rain";
 		} else {
+			disaster = "inappropriate water level in soil";
 			weatherStatus = "It's a normal day today";
 		}
 		return waterLevel;
 	}
-	public String displayWeatherStatus() {
+	/**
+	 * Get the details on the disaster that is occurring
+	 * @return disaster. String to display the natural disaster.
+	 */
+	public String occurredDisaster() {
+		return disaster;
+	}
+	/**
+	 * Get the weather status today.
+	 * @return weatherStatus. String to display the weather
+	 */
+	public String weatherStatus() {
 		return weatherStatus;
 	}
 }

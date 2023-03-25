@@ -4,6 +4,10 @@ package students.items;
  *
  */
 public class WeatherTotem extends Totem {
+	/**
+	 * Weather Totem.
+	 * Player can use it to manage the weather in their farm.
+	 */
 	public WeatherTotem() {
 		super();
 	}

@@ -6,17 +6,42 @@ import students.items.*;
 /**
  * The world environment
  * waterLevel determines the status of the field. If waterLevel is > 20, there will be a great chance of having *flood* event.
- * If waterLevel is < -20, there will be a great chance of having *drought* event.
+ * If waterLevel is < -20, there will be a great chance of having *drought* event. These events would make the crops die.
  * Normally the waterLevel will be decreased by 1 for each turn. Its value would only increase when there's *raining* event going on.
  */
 public class Field {
+	/**
+	 * The probability of weed would spawn at a given location.
+	 */
 	private final double WEED_SPAWN_CHANCE = 0.2;
+	/**
+	 * Maximum water level for the farm
+	 */
+	private final int maxWaterLevelFarm = 25;
+	/**
+	 * Minimum water level for the farm
+	 */
+	private final int minWaterLevelFarm = -25;
+	/**
+	 * Maximum water level for crops to grow
+	 */
+	private final int maxWaterLevelForCrops = 10;
+	/**
+	 * Minimum water level for crops to grow
+	 */
+	private final int minWaterLevelForCrops = -10;
+	/**
+	 * Water level in soil
+	 */
 	private int waterLevel;
+	/**
+	 * A list of items in the field.
+	 */
 	private Item[][] myItemList;
 	/**
 	 * Initialize the environment
-	 * @param height
-	 * @param width
+	 * @param height y-coordinate of the field.
+	 * @param width x-coordinate of the field.
 	 */
 	public Field(int height, int width)
 	{
@@ -29,7 +54,7 @@ public class Field {
 		waterLevel = 0;
 	}
 	/**
-	 * The world is running
+	 * Run the world
 	 */
 	public void tick() {
 		// {(1,2,3),(1,2,3)}
@@ -39,20 +64,20 @@ public class Field {
 				Item currentItem = myItemList[height][width];
 				currentItem.tick();
 
-
-				{
-					// TODO events logic
-				}
-				
 				// if it's Soil, turn into Weed
 				if(currentItem.toString().equals(".") && Math.random() <= WEED_SPAWN_CHANCE) {
 					plant(height, width, new Weed());
 
 				}
 				// if crops die, turn into UntilledSoil
-				if(currentItem.died()){
+				if(currentItem.died() ){
 					plant(height, width, new UntilledSoil());
+				} 
+				if (waterLevel > maxWaterLevelForCrops || waterLevel < minWaterLevelForCrops) {
+					plant(height, width, new WeatherAffectedFood());
+					
 				}
+				
 			}
 		}
 
@@ -73,14 +98,14 @@ public class Field {
 		this.waterLevel = 1;
 	}
 	/**
-	 * Losing humidity each day
+	 * Losing 1 water level each day
 	 */
 	public void losingHumidity() {
 		waterLevel -= 1;
 	}
 	/**
 	 * Return water level in the soil
-	 * @return
+	 * @return waterLevel
 	 */
 	public int getWaterLevel() {
 		return waterLevel;
@@ -111,16 +136,31 @@ public class Field {
 		}
 		return environment;
 	}
-
+	/**
+	 * Check if the field is destroyed due to the water level in the soil.
+	 * @return true if you no longer can plant stuff in this field. false otherwise.
+	 */
+	public boolean isFieldDestroyed() {
+		boolean result = false;
+		if(waterLevel < minWaterLevelFarm || waterLevel > maxWaterLevelFarm) {
+			result = true;
+		}
+		return result;
+	}
 	/**
 	 * Turn Item at the location into Soil
-	 * @param height
-	 * @param width
+	 * @param height y-coordinate of the crop
+	 * @param width x-coordinate of the crop
 	 */
 	public void till(int height, int width) {
 		myItemList[height][width] = new Soil();
-		
 	}
+	/**
+	 * Harvest the crop at this location
+	 * @param height y-coordinate of the crop
+	 * @param width x-coordinate of the crop
+	 * @return the monetary value of the crop. 0 if the crop is not ready
+	 */
 	public int harvest(int height, int width) {
 		int value = myItemList[height][width].getValue();
 		myItemList[height][width] = new Soil();
@@ -128,29 +168,29 @@ public class Field {
 	}
 	/**
 	 * Return a copy of the item at the given location
-	 * @param height
-	 * @param width
-	 * @return
+	 * @param height y-coordinate of the crop
+	 * @param width x-coordinate of the crop
+	 * @return a copy of the item.
 	 */
 	public Item get(int height, int width) {
 		return myItemList[height][width].clone();
 	}
 	
 	/**
-	 * Plant stuff in this location
-	 * @param height
-	 * @param width
-	 * @param item
+	 * Plant crops in this area
+	 * @param height y-coordinate of the crop
+	 * @param width x-coordinate of the crop
+	 * @param item crop to be planted at this location
 	 */
 	public void plant(int height, int width, Item item) {
-		if(!myItemList[height][width].toString().equals("/")) {
+		if(myItemList[height][width].toString().equals(".")) { // only plant on soil
 			myItemList[height][width] = item;	
 		} else {
-			System.out.println("Cannot be planted into untilled soil");
+			System.out.println("Please till or harvest this area first!");
 		}
 	}
 	/**
-	 * 
+	 * Get the total monetary value of the farm
 	 * @return totalMonetaryValue
 	 */
 	public int getValue() {
@@ -165,7 +205,7 @@ public class Field {
 	
 	/**
 	 * Print out the quantities and the overall of all items in the world 
-	 * @return
+	 * @return summary. String that summarizes all the details of the field.
 	 */
 	public String getSummary() {
 		String summary ="";
