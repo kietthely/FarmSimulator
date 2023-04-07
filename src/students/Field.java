@@ -115,27 +115,29 @@ public class Field {
 	 */
 	@Override
 	public String toString() {
-		String environment =" ";
-		
-		for(int width = 0; width < myItemList[0].length; width++ ) {
-			environment += String.format("%1$6s", width+1);
-			
-		}
+	    int width = myItemList[0].length;
+	    int height = myItemList.length;
+	    String environment = " ";
 
-		
-		for(int height = 0; height < myItemList.length; height++) {
-			environment += "\n" + (height+1);
-			for(int width = 0; width <myItemList[height].length; width++) {
-				String symbol = myItemList[height][width].toString();
+	    // Add x-coordinates to top row
+	    for (int x = 0; x < width; x++) {
+	        environment += String.format("%1$10s", x + 1);
+	    }
 
+	    // Add y-coordinates and elements to remaining rows
+	    for (int y = 0; y < height; y++) {
+	        environment += "\n" + String.format("%1$-10s", y + 1);
+	        for (int x = 0; x < width; x++) {
+	            String symbol = myItemList[y][x].toString();
+	            environment += String.format("%1$-10s", symbol);
+	        }
+	    }
 
-				environment += String.format("%1$6s", symbol);
-
-				
-			}
-		}
-		return environment;
+	    return environment;
 	}
+
+
+
 	/**
 	 * Check if the field is destroyed due to the water level in the soil.
 	 * @return true if you no longer can plant stuff in this field. false otherwise.
